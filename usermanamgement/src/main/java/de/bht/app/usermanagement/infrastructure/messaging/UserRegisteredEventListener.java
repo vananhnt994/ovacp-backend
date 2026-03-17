@@ -15,10 +15,5 @@ public class UserRegisteredEventListener {
         logger.info("Neuer Nutzer registriert:");
         logger.info("ID: {}", event.getId());
         logger.info("E-Mail: {}", event.getEmail());
-        logger.info("Adresse: {}", event.getAdresse());
-
-        if (event.getAdresse() == null || event.getAdresse().isEmpty()) {
-            logger.warn("Die Adresse für den Nutzer mit ID {} ist leer.", event.getId());
-        }
     }
 }

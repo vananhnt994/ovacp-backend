@@ -66,18 +66,14 @@ public class UserService {
         User user = new User();
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user.setAddress(userDto.getAddress());
-        user.setLastName(userDto.getLastName());
-        user.setFirstName(userDto.getFirstName());
-        user.setBirthDate(userDto.getBirthDate());
 
         if (userRepository != null && findByEmail(user.getEmail()) != null) {
             throw new Exception("E-Mail bereits registriert");
         }
 
-        System.out.println("Bürger registriert: " + user.getLastname() + " " + user.getFirstName());
+        System.out.println("Bürger registriert: " + user.getEmail());
 
-        assert userRepository != null; // Sicherstellen, dass das Repository nicht null ist
+        assert userRepository != null;
         userRepository.save(user);
     }
 

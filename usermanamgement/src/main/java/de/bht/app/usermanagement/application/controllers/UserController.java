@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * das Abrufen aller registrierten Nutzer.
  */
 @RestController
-@RequestMapping("/api/Users")
+@RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
