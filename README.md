@@ -52,7 +52,7 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 - Spring Boot **3.3.4**
 - Spring Cloud **2023.0.3**
 - Maven (Multi-Module)
-- MinIO/S3 (File Storage), PostgreSQL/Redis (Cache), OpenAI/Gemini API
+- MinIO/S3 (File Storage), PostgreSQL mit GCP, Gemini API
 
 ## Voraussetzungen
 
