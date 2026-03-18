@@ -1,0 +1,13 @@
+category_name,category_slug,product_count,avg_price,median_price,min_price,max_price,price_change_30d,price_change_90d
+"Dyr og tilbehør til kæledyr",dyr-og-tilbehor-til-kaeledyr,5758,832.51,224,3.9,794967,-35.52,240.55
+"Computere og software",computere-og-software,9151,1776.88,655,3.8,515790,-18.52,-29.51
+Elektronik,elektronik,13619,1446.98,299.95,0.06,289443,3.94,-41.5
+"Bolig og have",bolig-og-have,169413,1890.83,1030,0.43,265499,-19.9,-1.27
+"Kreativitet og Livsstil",kreativitet-og-livsstil,13252,320.14,75,0.33,110000,16.66,-52.04
+"Køretøjer og dele",koretojer-og-dele,6887,1219.27,399,1.03,116955,49.02,-8.9
+"Legetøj og spil",legetoj-og-spil,21479,478.4,209,3.5,155493,34.46,21.91
+Underholdning,underholdning,18330,201.74,179.95,10,18720,8.91,14.53
+"Sport og friluftsliv",sport-og-friluftsliv,22815,1070.06,479.95,1,779721,24.85,-27.52
+"Sundhed og skønhed",sundhed-og-skonhed,19994,360.19,187,2.61,118842,-9.56,35.17
+"Tøj og tilbehør",toj-og-tilbehor,13067,1234.5,599,2.85,933425,114.1,30.8
+"Byggeri og værktøj",byggeri-og-vaerktoej,18126,1475.94,450,0.09,934725,9.53,-27.42

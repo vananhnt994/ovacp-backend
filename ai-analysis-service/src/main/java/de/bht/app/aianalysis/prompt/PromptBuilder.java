@@ -17,8 +17,7 @@ public class PromptBuilder {
             "Du bist ein Datenanalyse-Experte. Du erhaeltst CSV-Daten mit statistischen "
           + "Zusammenfassungen ueber den GESAMTEN Datensatz und eine Stichprobe der Rohdaten. "
           + "Analysiere die Daten gruendlich und gib eine klare, strukturierte Antwort auf Deutsch. "
-          + "Verwende Zahlen, Statistiken und konkrete Beispiele. "
-          + "Falls du Diagramme oder Tabellen empfiehlst, beschreibe sie textuell.";
+          + "Verwende Zahlen, Statistiken und konkrete Beispiele.";
 
     private final int defaultSampleRows;
 
@@ -90,7 +89,45 @@ public class PromptBuilder {
 
         sb.append("=== FRAGE ===\n");
         sb.append(question).append("\n\n");
-        sb.append("Bitte antworte ausfuehrlich und strukturiert.");
+        sb.append("Bitte antworte in ZWEI Teilen:\n\n");
+        sb.append("TEIL 1 - ANALYSE:\n");
+        sb.append("Ausfuehrliche, strukturierte Textantwort auf Deutsch.\n\n");
+        sb.append("TEIL 2 - FERTIGE CHART-DATEN:\n");
+        sb.append("Du bist der Datenanalyst! Berechne aus den obigen Statistiken und Stichproben\n");
+        sb.append("die FERTIGEN Daten fuer 1-4 Diagramme. Das Frontend rendert sie direkt.\n\n");
+        sb.append("Verfuegbare chartType: BAR, HISTOGRAM, PIE, HEATMAP\n\n");
+        sb.append("REGELN:\n");
+        sb.append("- Berechne KONKRETE ZAHLEN aus den Statistiken (mean, count, min, max, etc.).\n");
+        sb.append("- Keine Platzhalter wie '...' - NUR echte berechnete Werte!\n");
+        sb.append("- labels: aussagekraeftige Beschriftungen.\n");
+        sb.append("- values/frequencies: konkrete Zahlenwerte.\n\n");
+        sb.append("Format (exakt diese Marker verwenden):\n\n");
+        sb.append("===CHARTS===\n");
+        sb.append("[\n");
+        sb.append("  {\n");
+        sb.append("    \"chartType\": \"BAR\",\n");
+        sb.append("    \"title\": \"Titel des Diagramms\",\n");
+        sb.append("    \"reason\": \"Warum dieses Diagramm relevant ist\",\n");
+        sb.append("    \"xAxisLabel\": \"X-Achse\",\n");
+        sb.append("    \"yAxisLabel\": \"Y-Achse\",\n");
+        sb.append("    \"data\": { \"labels\": [\"A\", \"B\"], \"values\": [123.4, 567.8] }\n");
+        sb.append("  },\n");
+        sb.append("  {\n");
+        sb.append("    \"chartType\": \"HISTOGRAM\",\n");
+        sb.append("    \"title\": \"Verteilung\",\n");
+        sb.append("    \"reason\": \"...\",\n");
+        sb.append("    \"xAxisLabel\": \"Wert\", \"yAxisLabel\": \"Anzahl\",\n");
+        sb.append("    \"data\": { \"binLabels\": [\"0-100\", \"100-200\"], \"frequencies\": [500, 300] }\n");
+        sb.append("  },\n");
+        sb.append("  {\n");
+        sb.append("    \"chartType\": \"PIE\",\n");
+        sb.append("    \"title\": \"Anteile\",\n");
+        sb.append("    \"reason\": \"...\",\n");
+        sb.append("    \"data\": { \"labels\": [\"X\", \"Y\"], \"values\": [60.0, 40.0] }\n");
+        sb.append("  }\n");
+        sb.append("]\n");
+        sb.append("===END_CHARTS===\n");
+        sb.append("WICHTIG: Obiges ist nur FORMAT-BEISPIEL! Berechne EIGENE Werte aus den tatsaechlichen Daten!\n");
         return sb.toString();
     }
 

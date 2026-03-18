@@ -5,6 +5,10 @@ import de.bht.app.filemanagement.service.CsvParserService;
 import de.bht.app.filemanagement.service.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,6 +117,39 @@ public class FileController {
                     Map.of("error", "Datei nicht gefunden: " + filename));
         } catch (Exception e) {
             log.error("Fehler beim Erstellen der Summary fuer {}: {}", filename, e.getMessage());
+            return ResponseEntity.internalServerError().body(
+                    Map.of("error", "Fehler: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Gibt die rohe CSV-Datei als Download/Stream zurueck.
+     * Ideal fuer Services die grosse Dateien verarbeiten muessen,
+     * ohne den JSON-Overhead der geparsten Version.
+     *
+     * @param filename Dateiname (z.B. "train.csv")
+     * @return die rohe CSV-Datei als Stream
+     */
+    @GetMapping("/download/{filename:.+}")
+    public ResponseEntity<?> downloadRawFile(@PathVariable String filename) {
+        try {
+            Path path = storageService.load(filename);
+            Resource resource = new UrlResource(path.toUri());
+            if (!resource.exists()) {
+                return ResponseEntity.status(404).body(
+                        Map.of("error", "Datei nicht gefunden: " + filename));
+            }
+            log.info("Raw-Download: {} ({} bytes)", filename, resource.contentLength());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + filename + "\"")
+                    .body(resource);
+        } catch (java.nio.file.NoSuchFileException e) {
+            return ResponseEntity.status(404).body(
+                    Map.of("error", "Datei nicht gefunden: " + filename));
+        } catch (Exception e) {
+            log.error("Fehler beim Download von {}: {}", filename, e.getMessage());
             return ResponseEntity.internalServerError().body(
                     Map.of("error", "Fehler: " + e.getMessage()));
         }

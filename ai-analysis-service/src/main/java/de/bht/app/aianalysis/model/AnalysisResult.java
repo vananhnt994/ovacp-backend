@@ -32,13 +32,17 @@ public class AnalysisResult {
     /** Fehlermeldung (falls error == true) */
     private String errorMessage;
 
+    /** Vom KI-Modell empfohlene Visualisierungen */
+    private List<ChartSuggestion> chartSuggestions;
+
     public AnalysisResult() {
         this.timestamp = LocalDateTime.now();
     }
 
     public static AnalysisResult success(String answer, List<String> analyzedFiles,
                                          String model, long processingTimeMs,
-                                         long totalRowsSent) {
+                                         long totalRowsSent,
+                                         List<ChartSuggestion> chartSuggestions) {
         AnalysisResult r = new AnalysisResult();
         r.answer = answer;
         r.analyzedFiles = analyzedFiles;
@@ -46,6 +50,7 @@ public class AnalysisResult {
         r.processingTimeMs = processingTimeMs;
         r.totalRowsSent = totalRowsSent;
         r.error = false;
+        r.chartSuggestions = chartSuggestions;
         return r;
     }
 
@@ -120,6 +125,14 @@ public class AnalysisResult {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public List<ChartSuggestion> getChartSuggestions() {
+        return chartSuggestions;
+    }
+
+    public void setChartSuggestions(List<ChartSuggestion> chartSuggestions) {
+        this.chartSuggestions = chartSuggestions;
     }
 }
 

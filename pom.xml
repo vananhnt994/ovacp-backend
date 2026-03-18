@@ -17,6 +17,7 @@
 		<module>usermanamgement</module>
 		<module>file-management</module>
 		<module>ai-analysis-service</module>
+		<module>chart-data-service</module>
 	</modules>
 	<packaging>pom</packaging>
 
