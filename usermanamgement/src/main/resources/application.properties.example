@@ -3,10 +3,10 @@ server.port=8081
 
 
 # PostgreSQL DataSource (required by DataSourceConfig)
-spring.cloud.gcp.sql.instance-connection-name=ovacp-db:europe-west3:ovacp
-spring.cloud.gcp.sql.database-name=ovacp-database
-spring.datasource.username=postgres
-spring.datasource.password=post123.PWD
+spring.cloud.gcp.sql.instance-connection-name={PROJECT:ZONE:INSTANCE}
+spring.cloud.gcp.sql.database-name={YOUR_DB_NAME}
+spring.datasource.username={YOUR_DB_USERNAME}
+spring.datasource.password={YOUR_DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 
@@ -25,7 +25,7 @@ eureka.client.fetch-registry=true
 # Die IP-Adresse statt Hostname nutzen (stabiler in Testumgebungen)
 eureka.instance.prefer-ip-address=true
 
-# Verzögert die Registrierung, damit der Context Zeit zum Atmen hat
+# Verzï¿½gert die Registrierung, damit der Context Zeit zum Atmen hat
 eureka.client.enabled=true
 # Wichtig: Wir zwingen die App, den DNS-Lookup/Initialisierung zu puffern
 eureka.client.should-enforce-registration-at-init=true

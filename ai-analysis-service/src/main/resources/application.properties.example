@@ -3,7 +3,7 @@ server.port=8083
 
 # ===== Gemini API =====
 # WICHTIG: Eigenen API-Key hier eintragen (https://aistudio.google.com/apikey)
-gemini.api.key=AIzaSyAb_ijULdOm5kECH6fa3TVvgecZID0WqEk
+gemini.api.key={YOUR_API_KEY}
 gemini.model=gemini-2.5-flash-lite
 gemini.timeout-seconds=600
 

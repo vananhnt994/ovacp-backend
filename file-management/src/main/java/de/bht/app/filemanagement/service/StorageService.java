@@ -64,7 +64,7 @@ public class StorageService {
             Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        log.info("Datei gespeichert: {} ({} Bytes)", filename, file.getSize());
+        log.info("Datei gespeichert: {} ({} Bytes) -> {}", filename, file.getSize(), destinationFile.toAbsolutePath());
         return destinationFile;
     }
 

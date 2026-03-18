@@ -1,16 +1,20 @@
 package de.bht.app.aianalysis.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import java.util.List;
 
 /**
  * DTO fuer eine Analyse-Anfrage vom Frontend.
+ * Akzeptiert verschiedene Feldnamen (deutsch/englisch) via @JsonAlias.
  */
 public class AnalysisRequest {
 
-    /** Liste der zu analysierenden CSV-Dateinamen (z.B. ["train.csv", "test.csv"]) */
+    /** Liste der zu analysierenden CSV-Dateinamen */
+    @JsonAlias({"fileNames", "dateien", "files"})
     private List<String> filenames;
 
-    /** Die Frage / Aufgabe des Nutzers (z.B. "Finde Ausreisser in den Daten") */
+    /** Die Frage / Aufgabe des Nutzers */
+    @JsonAlias({"query", "frage", "prompt"})
     private String question;
 
     /** Optionales Gemini-Modell (default: gemini-2.0-flash) */
@@ -59,4 +63,3 @@ public class AnalysisRequest {
         this.maxRows = maxRows;
     }
 }
-
