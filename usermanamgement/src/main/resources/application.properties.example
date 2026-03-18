@@ -1,0 +1,32 @@
+spring.application.name=usermanagement
+server.port=8081
+
+
+# PostgreSQL DataSource (required by DataSourceConfig)
+spring.cloud.gcp.sql.instance-connection-name={PROJECT:ZONE:INSTANCE}
+spring.cloud.gcp.sql.database-name={YOUR_DB_NAME}
+spring.datasource.username={YOUR_DB_USERNAME}
+spring.datasource.password={YOUR_DB_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+
+# JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Eureka
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.client.register-with-eureka=true
+eureka.client.fetch-registry=true
+
+
+# Die IP-Adresse statt Hostname nutzen (stabiler in Testumgebungen)
+eureka.instance.prefer-ip-address=true
+
+# Verz�gert die Registrierung, damit der Context Zeit zum Atmen hat
+eureka.client.enabled=true
+# Wichtig: Wir zwingen die App, den DNS-Lookup/Initialisierung zu puffern
+eureka.client.should-enforce-registration-at-init=true
+spring.cloud.service-registry.auto-registration.enabled=false
