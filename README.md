@@ -12,7 +12,7 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                     Frontend (Next.js / React)                      │
+│                     Frontend ( React)                               │
 │                    vananhnt994/ovacp_frontend                       │
 │        (CSV Upload │ Chat/Prompt Input │ Chart Visualization)       │
 └──────────────────────────────┬──────────────────────────────────────┘
