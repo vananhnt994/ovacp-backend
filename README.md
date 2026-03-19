@@ -1,6 +1,6 @@
-# OVACP Backend
+# OCVAP Backend
 
-Backend für OVACP als **Spring Boot / Spring Cloud Microservice-System** (Multi-Module Maven-Projekt).
+Backend für OCVAP als **Spring Boot / Spring Cloud Microservice-System** (Multi-Module Maven-Projekt).
 
 ## Überblick
 
