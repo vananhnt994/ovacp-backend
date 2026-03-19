@@ -11,28 +11,49 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 ## Architektur
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   Frontend (Next.js/React)           │
-│              vananhnt994/ovacp_frontend              │
-└──────────────────────┬──────────────────────────────┘
-                       │ REST/HTTP
-                       ▼
-┌─────────────────────────────────────────────────────┐
-│              API Gateway (Spring Cloud Gateway)      │
-│                    Port: 8080                        │
-└────┬──────────────┬───────────────┬─────────────────┘
-     │              │               │
-     ▼              ▼               ▼
-┌─────────┐  ┌──────────┐  ┌───────────────┐
-│  File   │  │   AI /   │  │ Visualization │
-│ Service │  │ Analysis │  │   Service     │
-│  :8081  │  │ Service  │  │    :8083      │
-│         │  │  :8082   │  │               │
-└────┬────┘  └────┬─────┘  └───────┬───────┘
-     │            │                │
-     ▼            ▼                ▼
-  MinIO/S3    OpenAI/           PostgreSQL/
-  Storage     Gemini API        Redis Cache
+┌─────────────────────────────────────────────────────────────────────┐
+│                     Frontend (Next.js / React)                      │
+│                    vananhnt994/ovacp_frontend                       │
+│        (CSV Upload │ Chat/Prompt Input │ Chart Visualization)       │
+└──────────────────────────────┬──────────────────────────────────────┘
+                               │ REST / HTTP
+                               ▼
+┌────────────────────────────────────────────────────────────────────┐
+│                  API Gateway (Spring Cloud Gateway)                │
+│                           Port: 8080                               │
+│              (Routing │ Auth Filter │ Rate Limiting)               │
+└────────┬──────────────┬──────────────┬───────────────┬─────────────┘
+         │              │              │               │
+         ▼              ▼              ▼               ▼
+┌─────────────┐  ┌────────────┐  ┌──────────────┐  ┌────────────────┐
+│    User     │  │   File     │  │  AI/Analysis │  │ Data Chart     │
+│ Management  │  │  Service   │  │   Service    │  │   Service      │
+│  Service    │  │   :8081    │  │    :8082     │  │    :8083       │
+│   :8084     │  │            │  │              │  │                │
+│             │  │ - CSV      │  │ - Prompt     │  │ - Bereitet     │
+│ - Register  │  │   parsen   │  │   empfangen  │  │   Daten für    │
+│ - Login     │  │ - Daten    │  │ - Gemini API │  │   Charts auf   │
+│ - JWT Auth  │  │   im       │  │   aufrufen   │  │ - Gibt JSON    │
+│ - Profile   │  │   Memory/  │  │ - Antwort    │  │   an Frontend  │
+│             │  │   Session  │  │   parsen &   │  │   zurück       │
+│             │  │   cachen   │  │   strukturie-│  │                │
+│             │  │            │  │   ren        │  │                │
+└──────┬──────┘  └─────┬──────┘  └──────┬───────┘  └────────────────┘
+       │               │                │
+       ▼               │                ▼
+┌─────────────┐        │         ┌─────────────────┐
+│ Cloud SQL   │        │         │   Gemini API    │
+│ (PostgreSQL │        │         │  (Google AI)    │
+│ on Google   │        │         └─────────────────┘
+│   Cloud)    │        │
+│             │        ▼
+│ - Users     │  ┌─────────────────────┐
+│ - Sessions  │  │  In-Memory / Session│
+│ - Roles     │  │  (temporärer        │
+└─────────────┘  │   CSV-Speicher,     │
+                 │   kein persistenter │
+                 │   Speicher nötig)   │
+                 └─────────────────────┘
 ```
 
 ## Module / Services (Maven)
@@ -41,10 +62,10 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 |---|---|---|
 | **eureka** | Eureka Server – Service Discovery | `8761` |
 | **gateway** | Spring Cloud Gateway – API Entry Point | `8080` |
-| **usermanamgement** | User Management Service | – |
-| **file-management** | File Management Service (CSV Upload / Storage) | `8081` |
-| **ai-analysis-service** | AI/Analysis Service (Gemini API, WebClient, Eureka LoadBalancer) | `8082` |
-| *(Visualization Service)* | Visualization Service | `8083` |
+| **usermanamgement** | User Management Service | 8081 |
+| **file-management** | File Management Service (CSV Upload / Storage) | `8082` |
+| **ai-analysis-service** | AI/Analysis Service (Gemini API, WebClient, Eureka LoadBalancer) | `8083` |
+| **Data-chart-service** | Visualization Service | `8084` |
 
 ## Tech Stack
 
@@ -52,7 +73,7 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 - Spring Boot **3.3.4**
 - Spring Cloud **2023.0.3**
 - Maven (Multi-Module)
-- MinIO/S3 (File Storage), PostgreSQL mit GCP, Gemini API
+- File Storage, PostgreSQL mit GCP, Gemini API
 
 ## Voraussetzungen
 
@@ -72,23 +93,28 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 
 ```bash
 # 1. Eureka Server (Service Discovery)
-./mvnw -pl eureka spring-boot:run
+./mvn -pl eureka spring-boot:run
 # → http://localhost:8761
 
 # 2. API Gateway
-./mvnw -pl gateway spring-boot:run
+./mvn -pl gateway spring-boot:run
 # → http://localhost:8080
 
 # 3. File Management Service
-./mvnw -pl file-management spring-boot:run
-# → http://localhost:8081
-
-# 4. AI Analysis Service
-./mvnw -pl ai-analysis-service spring-boot:run
+./mvn -pl file-management spring-boot:run
 # → http://localhost:8082
 
+# 4. AI Analysis Service
+./mvn -pl ai-analysis-service spring-boot:run
+# → http://localhost:8083
+
 # 5. User Management Service
-./mvnw -pl usermanamgement spring-boot:run
+./mvn -pl usermanamgement spring-boot:run
+# → http://localhost:8081
+
+# 6. Data Chart Service
+./mvn -pl usermanamgement spring-boot:run
+# → http://localhost:8081
 ```
 
 ## Konfiguration
