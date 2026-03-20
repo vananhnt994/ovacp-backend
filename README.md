@@ -11,22 +11,32 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 ## Architektur
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                     Frontend ( React)                               │
-│                    vananhnt994/ovacp_frontend                       │
-│        (CSV Upload │ Chat/Prompt Input │ Chart Visualization)       │
-└──────────────────────────────┬──────────────────────────────────────┘
-                               │ REST / HTTP
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        FRONTEND (React/TypeScript)                          │
+│              vananhnt994/ovacp_frontend                                     │
+│         CSV Upload  │  Chat/Prompt Input  │  Chart Visualisierung           │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ HTTP/REST
                                ▼
-┌────────────────────────────────────────────────────────────────────┐
-│                  API Gateway (Spring Cloud Gateway)                │
-│                           Port: 8080                               │
-│              (Routing │ Auth Filter │ Rate Limiting)               │
-└────────┬──────────────┬──────────────┬───────────────┬─────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      API GATEWAY (Spring Cloud Gateway)                     │
+│                              Port: 8080                                     │
+│              (Routing │ JWT Auth Filter │ Rate Limiting │ CORS)             │
+└────────┬──────────────┬──────────────┬───────────────┬────────────────────-─┘
+         │              │              │               │
+         │    ┌─────────────────────────────────┐      │
+         │    │        Eureka Server             │     │
+         │    │        (Service Discovery)       │     │
+         │    │  - Service Registry              │     │
+         │    │  - Health Monitoring             │     │
+         │    │  - Dynamic Routing               │     │
+         │    └──────────────┬──────────────────┘      │
+         │           alle Services registrieren sich   │
+         │           beim Start bei Eureka             │
          │              │              │               │
          ▼              ▼              ▼               ▼
 ┌─────────────┐  ┌────────────┐  ┌──────────────┐  ┌────────────────┐
-│    User     │  │   File     │  │  AI/Analysis │  │ Data Chart     │
+│    User     │  │   File     │  │  AI/Analysis │  │  Data Chart    │
 │ Management  │  │  Service   │  │   Service    │  │   Service      │
 │  Service    │  │   :8081    │  │    :8082     │  │    :8083       │
 │   :8084     │  │            │  │              │  │                │
@@ -34,24 +44,24 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 │ - Register  │  │   parsen   │  │   empfangen  │  │   Daten für    │
 │ - Login     │  │ - Daten    │  │ - Gemini API │  │   Charts auf   │
 │ - JWT Auth  │  │   im       │  │   aufrufen   │  │ - Gibt JSON    │
-│ - Profile   │  │   Memory/  │  │ - Antwort    │  │   an Frontend  │
-│             │  │   Session  │  │   parsen &   │  │   zurück       │
-│             │  │   cachen   │  │   strukturie-│  │                │
-│             │  │            │  │   ren        │  │                │
-└──────┬──────┘  └─────┬──────┘  └──────┬───────┘  └────────────────┘
-       │               │                │
-       ▼               │                ▼
-┌─────────────┐        │         ┌─────────────────┐
-│ Cloud SQL   │        │         │   Gemini API    │
-│ (PostgreSQL │        │         │  (Google AI)    │
-│ on Google   │        │         └─────────────────┘
-│   Cloud)    │        │
-│             │        ▼
-│ - Users     │  ┌─────────────────────┐
-│ - Sessions  │  │  In-Memory / Session│
-│ - Roles     │  │  (temporärer        │
-└─────────────┘  │   CSV-Speicher,     │
-                 │   kein persistenter │
+│ - Profile   │  │   Memory/  │  │ - Antwort    │  │   zurück       │
+│             │  │   Session  │  │   parsen &   │  │   (Labels,     │
+│             │  │   cachen   │  │   struktur.  │  │   Datasets,    │
+│             │  │            │  │              │  │   ChartType)   │
+└──────┬──────┘  └─────┬──────┘  └──────┬───────┘  └───────┬────────┘
+       │               │                │                   │
+       ▼               │                ▼                   │
+┌─────────────┐        │         ┌─────────────────┐        │
+│  Cloud SQL  │        │         │   Gemini API    │        │
+│ (PostgreSQL │        │         │  (Google AI)    │        │
+│  on Google  │        │         └─────────────────┘        │
+│   Cloud)    │        │                                    │
+│             │        ▼                                    │
+│ - Users     │  ┌─────────────────────┐                    │
+│ - Sessions  │  │  In-Memory / Session│◄───────────────────┘
+│ - Roles     │  │  (temporärer        │  Chart Service liest
+└─────────────┘  │   CSV-Speicher,     │  geparste CSV-Daten
+                 │   kein persistenter │  aus dem Session-Cache
                  │   Speicher nötig)   │
                  └─────────────────────┘
 ```
