@@ -1,0 +1,40 @@
+# .gcloudignore – Bestimmt was beim Cloud Build Upload ausgeschlossen wird.
+# WICHTIG: Überschreibt .gitignore komplett fuer gcloud builds submit.
+#
+# application.properties MUSS enthalten sein (im Gegensatz zu .gitignore)!
+
+# === Git ===
+.git
+.gitignore
+.gitattributes
+
+# === IDE ===
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# === Build-Artefakte (werden im Container neu gebaut) ===
+**/target/
+
+# === Docker ===
+docker-compose.yml
+.dockerignore
+.env
+
+# === Sonstiges ===
+README.md
+HELP.md
+uploads/
+*.log
+deploy-cloud.sh
+env.yaml
+

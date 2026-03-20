@@ -1,0 +1,40 @@
+# ==============================================================================
+#  OCVAP Backend – Cloud Build Konfiguration
+#  Baut 5 separate Docker-Images (kein Eureka fuer Cloud Run)
+#
+#  Aufruf:  gcloud builds submit --config=cloudbuild.yaml --region=europe-west3
+# ==============================================================================
+
+steps:
+  # Jedes Image nutzt den multi-stage Dockerfile mit --target
+  # Der Maven-Build (Stage "build") wird einmal ausgefuehrt und gecached
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--target', 'gateway', '-t', '${_REGISTRY}/gateway:latest', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--target', 'usermanagement', '-t', '${_REGISTRY}/usermanagement:latest', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--target', 'file-management', '-t', '${_REGISTRY}/file-management:latest', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--target', 'ai-analysis', '-t', '${_REGISTRY}/ai-analysis:latest', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--target', 'chart-data', '-t', '${_REGISTRY}/chart-data:latest', '.']
+
+images:
+  - '${_REGISTRY}/gateway:latest'
+  - '${_REGISTRY}/usermanagement:latest'
+  - '${_REGISTRY}/file-management:latest'
+  - '${_REGISTRY}/ai-analysis:latest'
+  - '${_REGISTRY}/chart-data:latest'
+
+substitutions:
+  _REGISTRY: 'europe-west3-docker.pkg.dev/ovacp-db/ovacp-repo'
+
+timeout: '1800s'
+options:
+  machineType: 'E2_HIGHCPU_8'
+

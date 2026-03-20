@@ -1,0 +1,23 @@
+# === Git ===
+.git
+.gitignore
+.gitattributes
+
+# === IDE ===
+.idea
+*.iws
+*.iml
+*.ipr
+
+# === Build-Artefakte (werden im Container neu gebaut) ===
+**/target/
+
+# === Docker selbst ===
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# === Sonstiges ===
+README.md
+uploads/
+*.log
