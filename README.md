@@ -25,11 +25,11 @@ Dieses Repository enthält mehrere Services, die zusammen über **Eureka (Servic
 └────────┬──────────────┬──────────────┬───────────────┬────────────────────-─┘
          │              │              │               │
          │    ┌─────────────────────────────────┐      │
-         │    │        Eureka Server             │     │
-         │    │        (Service Discovery)       │     │
-         │    │  - Service Registry              │     │
-         │    │  - Health Monitoring             │     │
-         │    │  - Dynamic Routing               │     │
+         │    │        Eureka Server            │      │
+         │    │        (Service Discovery)      │      │
+         │    │  - Service Registry             │      │
+         │    │  - Health Monitoring            │      │
+         │    │  - Dynamic Routing              │      │
          │    └──────────────┬──────────────────┘      │
          │           alle Services registrieren sich   │
          │           beim Start bei Eureka             │
